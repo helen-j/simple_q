@@ -22,7 +22,7 @@ GAMMA       = 0.7
 
 numstates   = 4
 numactions  = 4
-numtrials   = 100
+numturns    = 100
 actions     = [0,1,2,3]
 action      = 0
 solved      = False
@@ -60,12 +60,19 @@ def checkSolved():
 
 # ---------------------------------------------------------------------
 def initializeState():
+    print("debug: initializeState()", initialState)
     state=initialState
     solved=False
+
+# ---------------------------------------------------------------------
+def initializeQTable():
+    print("debug: initializeQTable()", numstates, numstates, numactions)
+    qtable = []
     qtable = np.zeros((numstates, numstates, numactions))#array of zeros
 
 # ---------------------------------------------------------------------
 def explore(agent):
+    print("debug: explore()")
     initializeState()
 
     counter=0
@@ -85,6 +92,7 @@ def explore(agent):
 
 # ---------------------------------------------------------------------
 def exploit(agent):
+    print("debug: exploit()")
     initializeState()
 
     counter = 0
@@ -105,6 +113,7 @@ def exploit(agent):
 
 # ---------------------------------------------------------------------
 def calculateQ(agent, state, action, immreward):
+    print("debug: calculateQ() ", agent, state, action, immreward)
     # =========================
     # Calculates the value of Q and updates qtable
     # =========================
@@ -119,6 +128,7 @@ def calculateQ(agent, state, action, immreward):
 
 # ---------------------------------------------------------------------
 def checkSolved(currentAction):
+    print("debug: checkSolved() ", currentAction)
     if (currentAction == finalState):
         return True
     else:
@@ -127,6 +137,7 @@ def checkSolved(currentAction):
 
 # ---------------------------------------------------------------------
 def printQTable():
+    print("debug: printQTable()")
     for action in actions:
         qtable[0, 0, action] = action
 
@@ -141,13 +152,15 @@ def printQTable():
     # =========================
 print("debug: main()")
 
+initializeQTable()
 initializeState()
 
-for i in numtrials:
-    if i % 2 == 0:
-        explore(redAgent)
+
+for x in range(numturns):
+    if x % 2 == 0:
+        explore(agent)
     else:
-        exploit(redAgent)
+        exploit(agent)
 
 
 
