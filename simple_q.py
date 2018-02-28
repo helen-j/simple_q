@@ -22,25 +22,25 @@ GAMMA       = 0.7
 
 numstates   = 4
 numactions  = 4
-numtrials   = 1000
+numtrials   = 100
 actions     = [0,1,2,3]
 action      = 0
 solved      = False
 
 initialState = [1,0,1,1]
-finalState  = [0,1,0,0]
+finalState  = [1,1,1,1]
 completedActions = []
 state       = []
 
 # Initialize Q-table with all zeros
 # Q values will be calculated as state/action are tested
 qtable = []
-qtable = np.zeros((numstates, numstates, numactions))#array of zeros
 
 
 # ---------------------------------------------------------------------
+start = timeit.timeit()
 
-
+# ---------------------------------------------------------------------
 
 def updateState(action):
     #change state vector
@@ -50,6 +50,7 @@ def updateState(action):
     else:
         state[action]==1
 
+# ---------------------------------------------------------------------
 def checkSolved():
     if (state == finalState):
         solved=True
@@ -57,10 +58,13 @@ def checkSolved():
     else :
         return 0
 
+# ---------------------------------------------------------------------
 def initializeState():
     state=initialState
     solved=False
+    qtable = np.zeros((numstates, numstates, numactions))#array of zeros
 
+# ---------------------------------------------------------------------
 def explore(agent):
     initializeState()
 
@@ -79,6 +83,7 @@ def explore(agent):
 #       Q[s,a] = Q[s,a] + lr*(r + y*np.max(Q[s1,:]) - Q[s,a]) #https://github.com/awjuliani/DeepRL-Agents/blob/master/Q-Table.ipynb
 #
 
+# ---------------------------------------------------------------------
 def exploit(agent):
     initializeState()
 
@@ -98,7 +103,11 @@ def exploit(agent):
     pass
 
 
+# ---------------------------------------------------------------------
 def calculateQ(agent, state, action, immreward):
+    # =========================
+    # Calculates the value of Q and updates qtable
+    # =========================
 
     # agent.reward = (calculateQ())
     #        Q(state, action) = R(state, action) + Gamma * Max[Q(next state, all actions)] http://mnemstudio.org/path-finding-q-learning-tutorial.htm
@@ -108,6 +117,7 @@ def calculateQ(agent, state, action, immreward):
 
     pass
 
+# ---------------------------------------------------------------------
 def checkSolved(currentAction):
     if (currentAction == finalState):
         return True
@@ -115,6 +125,7 @@ def checkSolved(currentAction):
         return False
 
 
+# ---------------------------------------------------------------------
 def printQTable():
     for action in actions:
         qtable[0, 0, action] = action
@@ -122,75 +133,30 @@ def printQTable():
     print(qtable)
 
 
-def main():
+# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+#def main():
     # =========================
     # Settings
     # =========================
+print("debug: main()")
 
-    start = timeit.timeit()
+initializeState()
 
-    # =========================
-    # Set up environment, agent
-    # =========================
-
-    redAgent = AgentClass.Agent()
-    computer = EnvironmentClass.Environment()
-    qtable = np.zeros((numstates, numstates), dtype=np.float)#array of zeros
-
-    # =========================
-    # Train agent
-    # =========================
-    """
-       # for x in range(MAXTURNS):
-    
-          #  for x in agentList:
-             #  # '''# 1. Check state '''
-    
-               # '''# 2. Choose action '''
-                #a = random.choice(possibleRedActions)
-    
-               # '''# 3. Perform Action '''
-                #completedActions.append([x, redAgent.chooseAction(x)])
-    
-               # ''' #1. Check state '''
-    
-               # '''# 4. Get Reward '''
-    
-        #        calculateQValues(red.qTable)
-    """
-
-
-    for i in numtrials:
-        if i % 2 == 0:
-            explore(redAgent)
-        else:
-            exploit(redAgent)
+for i in numtrials:
+    if i % 2 == 0:
+        explore(redAgent)
+    else:
+        exploit(redAgent)
 
 
 
 
-    end = timeit.timeit()
+# ---------------------------------------------------------------------
 
-    printQTable()
+print(qtable)
 
-# =========================
-#if __name__== "__main__":
-#    main()
-#    pass
+end = timeit.timeit()
+print("time to execute: ", (end - start))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#state numbers reflect computer e.g., first might be firewall active?
+    #printQTable()
