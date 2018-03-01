@@ -20,7 +20,7 @@ import random
 
 GAMMA       = 0.7
 
-numstates   = 4
+numstates   = 16
 numactions  = 4
 numturns    = 100
 actions     = [0,1,2,3]
@@ -63,16 +63,17 @@ def initializeState():
     print("debug: initializeState()", initialState)
     state=initialState
     solved=False
-
 # ---------------------------------------------------------------------
 def initializeQTable():
-    print("debug: initializeQTable()", numstates, numstates, numactions)
+    print("debug: initializeQTable()", numstates, numactions)
     qtable = []
-    qtable = np.zeros((numstates, numstates, numactions))#array of zeros
+    qtable = np.zeros((numstates, numactions))#array of zeros
+
+    # https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-0-q-learning-with-tables-and-neural-networks-d195264329d0
 
 # ---------------------------------------------------------------------
 def explore(agent):
-    print("debug: explore()")
+    print("debug: explore()", agent)
     initializeState()
 
     counter=0
@@ -155,15 +156,14 @@ print("debug: main()")
 initializeQTable()
 initializeState()
 
-
+'''
 for x in range(numturns):
     if x % 2 == 0:
         explore(agent)
     else:
         exploit(agent)
 
-
-
+'''
 
 # ---------------------------------------------------------------------
 
