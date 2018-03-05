@@ -18,8 +18,8 @@ import random
 # Parameters
 # =========================
 
-GAMMA       = 0.7
-
+GAMMA       = 0.9 #Towards 0 -> Greedy, towards 1 -> Exploration
+learningrate = 0.8
 numstates   = 16
 numactions  = 4
 numturns    = 100
@@ -45,13 +45,15 @@ start = timeit.timeit()
 def updateState(action):
     #change state vector
     #based on action
+    #('toggle' or switch the value)
     if state[action] ==1:
         state[action]==0
     else:
         state[action]==1
 
 # ---------------------------------------------------------------------
-def checkSolved():
+def checkSolved(currentAction):
+    print("debug: checkSolved() ", currentAction)
     if (state == finalState):
         solved=True
         return 1000
@@ -63,6 +65,7 @@ def initializeState():
     print("debug: initializeState()", initialState)
     state=initialState
     solved=False
+
 # ---------------------------------------------------------------------
 def initializeQTable():
     print("debug: initializeQTable()", numstates, numactions)
@@ -118,6 +121,11 @@ def calculateQ(agent, state, action, immreward):
     # =========================
     # Calculates the value of Q and updates qtable
     # =========================
+    agent.qtable[state, action] = \
+        qtable[state, action] + \
+        learningrate*(r + y*np.max(Q[s1,:]) -
+        qtable[state, action])
+
 
     # agent.reward = (calculateQ())
     #        Q(state, action) = R(state, action) + Gamma * Max[Q(next state, all actions)] http://mnemstudio.org/path-finding-q-learning-tutorial.htm
@@ -127,13 +135,6 @@ def calculateQ(agent, state, action, immreward):
 
     pass
 
-# ---------------------------------------------------------------------
-def checkSolved(currentAction):
-    print("debug: checkSolved() ", currentAction)
-    if (currentAction == finalState):
-        return True
-    else:
-        return False
 
 
 # ---------------------------------------------------------------------
